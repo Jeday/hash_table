@@ -34,6 +34,8 @@ public:
          for(int i = 1; i<size_factor; ++i)
              n<<1;
          table = new std::list<std::pair<key,int>>*[n];
+         for(int i = 0;i<n;++i )
+             table[i] = nullptr;
     }
 
     void insert(const key& k){
@@ -44,7 +46,7 @@ public:
                  auto it = table[ind]->begin();
                  auto en = table[ind]->end();
                  while(it != en){
-                         if(is_equal((*it).first,k)){
+                         if(equal((*it).first,k)){
                              ++(*it).second;
                              break;
                              }
@@ -65,7 +67,7 @@ public:
                    auto it = table[ind]->begin();
                    auto en = table[ind]->end();
                    while(it != en){
-                           if(is_equal((*it).first,k)){
+                           if(equal((*it).first,k)){
                                     return true;
                                }
                            else
@@ -84,7 +86,7 @@ public:
                    auto it = table[ind]->begin();
                    auto en = table[ind]->end();
                    while(it != en){
-                           if(is_equal((*it).first,k)){
+                           if(equal((*it).first,k)){
                                     return (*it).second;
                                }
                            else
@@ -104,7 +106,7 @@ public:
                        auto it = table[ind]->begin();
                        auto en = table[ind]->end();
                        while(it != en){
-                               if(is_equal((*it).first,k)){
+                               if(equal((*it).first,k)){
                                         table[ind]->erase(it);
                                         if(table[ind]->size() == 0){
                                             delete table[ind];
