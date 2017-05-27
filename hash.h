@@ -17,23 +17,33 @@ private:
 
     int n;
 
+    double dump;
+
     int h(const key& k){
-        return  floor(n*fmod(hashing_fucntion(k)*A,1));
+
+        int h = hashing_fucntion(k);
+        return floor( n*modf(h*A,&dump));
+
+
     }
 
     std::list<std::pair<key,int>> ** table;
 
+    int collusion_counter;
 public:
 
-
+    int collusions(){
+        return collusion_counter;
+    }
 
 
     hset(int size_factor){
          A = (sqrt(5)-1)/2;
          n = 2;
          for(int i = 1; i<size_factor; ++i)
-             n<<1;
+             n*=2;
          table = new std::list<std::pair<key,int>>*[n];
+         collusion_counter = 0;
          for(int i = 0;i<n;++i )
              table[i] = nullptr;
     }
@@ -43,6 +53,7 @@ public:
         if(table[ind] == nullptr)
             table[ind] = new std::list<std::pair<key,int>> {{k,1}};
         else{
+                 collusion_counter+=1;
                  auto it = table[ind]->begin();
                  auto en = table[ind]->end();
                  while(it != en){
@@ -64,6 +75,8 @@ public:
           if(table[ind] == nullptr)
              return false;
           else{
+
+                  collusion_counter+=1;
                    auto it = table[ind]->begin();
                    auto en = table[ind]->end();
                    while(it != en){
@@ -83,6 +96,8 @@ public:
           if(table[ind] == nullptr)
              return 0;
           else{
+
+                  collusion_counter+=1;
                    auto it = table[ind]->begin();
                    auto en = table[ind]->end();
                    while(it != en){
@@ -103,6 +118,8 @@ public:
               if(table[ind] == nullptr)
                  return false;
               else{
+
+                      collusion_counter+=1;
                        auto it = table[ind]->begin();
                        auto en = table[ind]->end();
                        while(it != en){
@@ -131,6 +148,6 @@ public:
     };
 
 
-
+void test_hash();
 
 #endif // HASH_H
