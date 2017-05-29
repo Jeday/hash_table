@@ -4,6 +4,8 @@
 #include <cmath>
 #include <list>
 #include <utility>
+#include <ostream>
+#include <cstring>
 
 template<typename key, class hash, class is_equal>
 class hset
@@ -15,15 +17,13 @@ private:
 
     is_equal equal;
 
-    int n;
+    size_t n;
+    size_t n2;
 
     double dump;
 
-    int h(const key& k){
-
-        int h = hashing_fucntion(k);
-        return floor( n*modf(h*A,&dump));
-
+    size_t h(const key& k){
+        return  floor( n*modf((hashing_fucntion(k))%n2*A,&dump));
 
     }
 
@@ -42,6 +42,7 @@ public:
          n = 2;
          for(int i = 1; i<size_factor; ++i)
              n*=2;
+         n2 = n*n;
          table = new std::list<std::pair<key,int>>*[n];
          collusion_counter = 0;
          for(int i = 0;i<n;++i )
@@ -144,8 +145,30 @@ public:
       delete[] table;
     }
 
+    void print_to_stream(std::ostream& os){
+        for(int i = 0; i< n; i++){
+            os<<i<<"\t";
+                if(table[i] != nullptr){
+                    auto it = table[i]->begin();
+                    os<<(*it).first<<" | "<<(*it).second;
+                    ++it;
+                    while(it != table[i]->end()){
+                       os<<" -> "<<(*it).first<<" | "<<(*it).second;
+                       ++it;
+                    }
+                    os<<" -|";
+
+                    }
+                else
+                     os<<"NULL";
+            os<<std::endl;
+          }
+    }
+
 
     };
+
+
 
 
 void test_hash();

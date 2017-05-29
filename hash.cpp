@@ -78,6 +78,7 @@ void test_hash(){
     }
 
 
+    set.print_to_stream(std::cout);
 
     std::cout<<"my hash:"<<time_passed<<" sec\tvs std hash:"<<std_time_passed<<" sec with "<<iterations*100<<" inserts/deletes "<<std::endl;
 }
